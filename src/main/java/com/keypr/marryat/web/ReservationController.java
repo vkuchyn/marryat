@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * Rest controller responsible for reservations CRUD manipulations and retrieving.
+ *
  * @author viktor email kuchin.victor@gmail.com
  */
 @RestController
