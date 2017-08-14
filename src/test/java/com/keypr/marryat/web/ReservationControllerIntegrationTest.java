@@ -43,7 +43,7 @@ public class ReservationControllerIntegrationTest {
         )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-//                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(content().json("[{" +
                         "\"errorKey\":\"end.date.after.start.date\"," +
                         "\"description\":\"End date should be after start date\"" +
