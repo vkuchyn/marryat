@@ -3,6 +3,7 @@ package com.keypr.marryat.web;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.keypr.marryat.web.validation.DateRange;
+import com.keypr.marryat.web.validation.FutureOrToday;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -29,6 +30,7 @@ public final class ReservationView {
 
     @JsonProperty("start_date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @FutureOrToday
     private LocalDate start;
 
     @JsonProperty("end_date")
