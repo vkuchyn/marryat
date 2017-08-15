@@ -2,6 +2,7 @@ package com.keypr.marryat.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDate;
@@ -11,9 +12,10 @@ import java.time.LocalDate;
  *
  * @author viktor email kuchin.victor@gmail.com
  */
-@EqualsAndHashCode(of = {"firstName", "lastName", "room", "start", "end"})
 @AllArgsConstructor
+@EqualsAndHashCode(of = {"firstName", "lastName", "room", "start", "end"})
 @ToString
+@Getter
 public class Reservation {
 
     private final Long id;
