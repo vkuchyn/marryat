@@ -27,7 +27,6 @@ public class ReservationController {
 
     @PostMapping("/reservations")
     public ReservationView reserveRoom(@Valid @RequestBody final ReservationView reservationView, final Errors errors) {
-        //TODO(vkuchyn) implement feature
         final Reservation reservation = new Reservation(
                 reservationView.getFirstName(), reservationView.getLastName(),
                 reservationView.getRoomNumber(), reservationView.getStart(), reservationView.getEnd()

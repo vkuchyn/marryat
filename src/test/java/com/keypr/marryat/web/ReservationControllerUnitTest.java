@@ -1,5 +1,6 @@
 package com.keypr.marryat.web;
 
+import com.keypr.marryat.commons.ApplicationException;
 import com.keypr.marryat.domain.Reservation;
 import com.keypr.marryat.service.ReservationService;
 import org.junit.Before;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 /**
@@ -41,11 +43,17 @@ public class ReservationControllerUnitTest {
     public void reservesRoom() throws Exception {
         when(service.reserveRoom(new Reservation(FIRST_NAME, SECOND_NAME, ROOM, TODAY, TODAY)))
                 .thenReturn(GENERATED_ID);
-        final ReservationView actual = controller.reserveRoom(
+        final ReservationView actual = this.controller.reserveRoom(
                 new ReservationView(FIRST_NAME, SECOND_NAME, ROOM, TODAY, TODAY), null
         );
         assertThat(actual, is(new ReservationView(
                 GENERATED_ID, FIRST_NAME, SECOND_NAME, ROOM, TODAY, TODAY)
         ));
+    }
+
+    @Test(expected = ApplicationException.class)
+    public void rethrowsServiceApplicationException() throws Exception {
+        when(service.reserveRoom(any(Reservation.class))).thenThrow(new ApplicationException());
+        this.controller.reserveRoom(new ReservationView(FIRST_NAME, SECOND_NAME, ROOM, TODAY, TODAY), null);
     }
 }
