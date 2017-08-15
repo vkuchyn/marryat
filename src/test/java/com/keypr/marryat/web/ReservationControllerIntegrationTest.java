@@ -1,6 +1,7 @@
 package com.keypr.marryat.web;
 
 import com.keypr.marryat.commons.Clock;
+import com.keypr.marryat.service.ReservationService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +36,9 @@ public final class ReservationControllerIntegrationTest {
 
     @MockBean
     private Clock clock;
+
+    @MockBean
+    private ReservationService service;
 
     @Before
     public void setUpMocks() {
