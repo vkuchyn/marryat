@@ -19,22 +19,31 @@ import java.time.LocalDate;
 @DateRange(message = "{end.date.after.start.date}")
 public final class ReservationView {
 
+    private static final long DEFAULT_ID = 0L;
+    @JsonProperty("id")
+    private Long id;
     @JsonProperty("first_name")
     private String firstName;
-
     @JsonProperty("last_name")
     private String lastName;
-
     @JsonProperty("room")
     private String roomNumber;
-
     @JsonProperty("start_date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @FutureOrToday
     private LocalDate start;
-
     @JsonProperty("end_date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate end;
 
+    public ReservationView(
+            final String firstName, final String lastName, final String roomNumber,
+            final LocalDate start, final LocalDate end
+    ) {
+        this(DEFAULT_ID, firstName, lastName, roomNumber, start, end);
+    }
+
+    public ReservationView(final Long id, final ReservationView view) {
+        this(id, view.getFirstName(), view.getLastName(), view.getRoomNumber(), view.getStart(), view.getEnd());
+    }
 }

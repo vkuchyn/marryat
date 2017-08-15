@@ -1,5 +1,8 @@
 package com.keypr.marryat.web;
 
+import com.keypr.marryat.domain.Reservation;
+import com.keypr.marryat.service.ReservationService;
+import lombok.AllArgsConstructor;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,10 +20,19 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(consumes = "application/json", produces = "application/json")
 @Validated
+@AllArgsConstructor
 public class ReservationController {
 
+    private final ReservationService reservationService;
+
     @PostMapping("/reservations")
-    public void reserveRoom(@Valid @RequestBody final ReservationView reservation, Errors errors) {
+    public ReservationView reserveRoom(@Valid @RequestBody final ReservationView reservationView, final Errors errors) {
         //TODO(vkuchyn) implement feature
+        final Reservation reservation = new Reservation(
+                reservationView.getFirstName(), reservationView.getLastName(),
+                reservationView.getRoomNumber(), reservationView.getStart(), reservationView.getEnd()
+        );
+        final Long reservationId = reservationService.reserveRoom(reservation);
+        return new ReservationView(reservationId, reservationView);
     }
 }
