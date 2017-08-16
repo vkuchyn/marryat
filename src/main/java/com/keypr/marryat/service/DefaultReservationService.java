@@ -1,5 +1,6 @@
 package com.keypr.marryat.service;
 
+import com.keypr.marryat.commons.ApplicationException;
 import com.keypr.marryat.dao.ReservationRepository;
 import com.keypr.marryat.domain.Reservation;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,12 @@ public final class DefaultReservationService implements ReservationService {
 
     @Override
     public Long reserveRoom(final Reservation reservation) {
+        final int roomReservations = this.reservationRepository.countByRoomAndDateRange(
+                reservation.getRoom(), reservation.getStart(), reservation.getEnd()
+        );
+        if (roomReservations > 0) {
+            throw new ApplicationException();
+        }
         return reservationRepository.save(reservation).getId();
     }
 }
