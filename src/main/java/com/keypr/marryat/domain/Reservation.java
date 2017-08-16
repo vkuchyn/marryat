@@ -1,9 +1,6 @@
 package com.keypr.marryat.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +14,7 @@ import java.time.LocalDate;
  * @author viktor email kuchin.victor@gmail.com
  */
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = {"firstName", "lastName", "room", "start", "end"})
 @ToString
 @Getter
@@ -25,12 +23,12 @@ public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final Long id;
-    private final String firstName;
-    private final String lastName;
-    private final String room;
-    private final LocalDate start;
-    private final LocalDate end;
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private String room;
+    private LocalDate start;
+    private LocalDate end;
 
     public Reservation(
             final String firstName, final String lastName, final String room,
