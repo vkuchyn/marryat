@@ -15,7 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -61,12 +60,31 @@ public class ReservationRepositoryTest {
 
     @Test
     @DataSet("/dbunit/ReservationRepositoryTest/reservations_initial.xml")
+    public void countsZeroWhenReservationsStartAtSameDayPreviousEnds() throws Exception {
+        final int count = repository.countByRoomAndDateRange("7",
+                LocalDate.of(2017, 8, 13), LocalDate.of(2017, 8, 14)
+        );
+
+        assertThat(count, is(0));
+    }
+
+    @Test
+    @DataSet("/dbunit/ReservationRepositoryTest/reservations_initial.xml")
     public void countsOneReservationWhenStartDateBetweenBookedDates() throws Exception {
         final int count = repository.countByRoomAndDateRange("7",
                 LocalDate.of(2017, 8, 16), LocalDate.of(2017, 8, 18)
         );
 
-        final List<Reservation> all = repository.findAll();
+        assertThat(count, is(1));
+    }
+
+    @Test
+    @DataSet("/dbunit/ReservationRepositoryTest/reservations_initial.xml")
+    public void countsOneReservationWhenEndDateBetweenBookedDates() throws Exception {
+        final int count = repository.countByRoomAndDateRange("7",
+                LocalDate.of(2017, 8, 13), LocalDate.of(2017, 8, 15)
+        );
+
         assertThat(count, is(1));
     }
 }
