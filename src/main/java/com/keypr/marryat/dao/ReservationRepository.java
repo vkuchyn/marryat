@@ -2,6 +2,7 @@ package com.keypr.marryat.dao;
 
 import com.keypr.marryat.domain.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 
@@ -20,5 +21,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
      * @param end   End date of reservation.
      * @return count of founded reservations.
      */
+    @Query("SELECT 1 FROM Reservation")
     int countByRoomAndDateRange(String room, LocalDate start, LocalDate end);
 }
