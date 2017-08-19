@@ -46,4 +46,24 @@ public final class DateRangeValidatorTest {
         final boolean valid = new DateRangeValidator().isValid(reservation, mock(ConstraintValidatorContext.class));
         assertThat(valid, is(false));
     }
+
+    @Test
+    public void returnsTrueIfStartDateIsNull() throws Exception {
+        final ReservationView reservation = new ReservationView(
+                "first", "last", "room",
+                null, LocalDate.of(2017, 8, 14)
+        );
+        final boolean valid = new DateRangeValidator().isValid(reservation, mock(ConstraintValidatorContext.class));
+        assertThat(valid, is(true));
+    }
+
+    @Test
+    public void returnsTrueIfEndDateIsNull() throws Exception {
+        final ReservationView reservation = new ReservationView(
+                "first", "last", "room",
+                LocalDate.of(2017, 8, 14), null
+        );
+        final boolean valid = new DateRangeValidator().isValid(reservation, mock(ConstraintValidatorContext.class));
+        assertThat(valid, is(true));
+    }
 }

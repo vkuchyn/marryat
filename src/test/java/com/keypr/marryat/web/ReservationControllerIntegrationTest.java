@@ -86,4 +86,25 @@ public final class ReservationControllerIntegrationTest {
                         "\"description\":\"Start date should be after or equals today\"" +
                         "}]"));
     }
+
+    @Test
+    public void validatesNullInputs() throws Exception {
+        mockMvc.perform(
+                post("/reservations")
+                        .content("{}")
+                        .contentType("application/json")
+        )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(content().json('[' +
+                        "{\"errorKey\":\"start.date.not.null\"," +
+                        "\"description\":\"Expecting start date format apply pattern 'yyyyMMdd' and may not be " +
+                        "null\"}," +
+                        "{\"errorKey\":\"end.date.not.null\"," +
+                        "\"description\":\"Expecting end date format apply pattern 'yyyyMMdd' and may not be null\"}" +
+                        ']')
+                );
+
+    }
 }

@@ -7,6 +7,7 @@ import com.keypr.marryat.web.validation.FutureOrToday;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 /**
@@ -30,10 +31,12 @@ public final class ReservationView {
     private String roomNumber;
     @JsonProperty("start_date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @NotNull(message = "{start.date.not.null}")
     @FutureOrToday
     private LocalDate start;
     @JsonProperty("end_date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @NotNull(message = "{end.date.not.null}")
     private LocalDate end;
 
     public ReservationView(
