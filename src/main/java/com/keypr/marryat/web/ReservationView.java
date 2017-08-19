@@ -24,10 +24,13 @@ public final class ReservationView {
     @JsonProperty("id")
     private Long id;
     @JsonProperty("first_name")
+    @NotNull(message = "{first.name.not.null}")
     private String firstName;
     @JsonProperty("last_name")
+    @NotNull(message = "{last.name.not.null}")
     private String lastName;
     @JsonProperty("room")
+    @NotNull(message = "{room.date.not.null}")
     private String roomNumber;
     @JsonProperty("start_date")
     @JsonDeserialize(using = LocalDateDeserializer.class)

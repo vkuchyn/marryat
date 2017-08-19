@@ -102,7 +102,12 @@ public final class ReservationControllerIntegrationTest {
                         "\"description\":\"Expecting start date format apply pattern 'yyyyMMdd' and may not be " +
                         "null\"}," +
                         "{\"errorKey\":\"end.date.not.null\"," +
-                        "\"description\":\"Expecting end date format apply pattern 'yyyyMMdd' and may not be null\"}" +
+                        "\"description\":\"Expecting end date format apply pattern 'yyyyMMdd' and may not be null\"}," +
+                        "{\"errorKey\":\"room.date.not.null\",\"description\":\"Expecting room not null value\"}," +
+                        "{\"errorKey\":\"first.name.not.null\"," +
+                        "\"description\":\"Expecting first name not null value\"}," +
+                        "{\"errorKey\":\"last.name.not.null\"," +
+                        "\"description\":\"Expecting last name not null value\"}" +
                         ']')
                 );
 
