@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <reservation first_name="first" last_name="last" room="room" start="2017-08-14" end="2017-08-14"/>
+</dataset>
