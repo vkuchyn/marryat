@@ -10,13 +10,18 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -30,8 +35,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @ActiveProfiles("test")
 public class ReservationRepositoryTest {
 
+    public static final LocalDate SEVENTEENTH_AUGUST = LocalDate.of(2017, 8, 17);
     private static final LocalDate TODAY = LocalDate.of(2017, 8, 14);
-
     @Autowired
     private ReservationRepository repository;
     @Autowired
@@ -97,5 +102,30 @@ public class ReservationRepositoryTest {
         );
 
         assertThat(count, is(0));
+    }
+
+    //TODO(vkuchyn) manage situations for end date is in new reservation range
+
+
+    @Test
+    @DataSet(value = "/dbunit/ReservationRepositoryTest/findsAllReservationsByDateRangeAndPage_initial.xml")
+    public void findsAllReservationsByDateRange() throws Exception {
+        final Page<Reservation> actual = repository.findByStartBetween(
+                TODAY, SEVENTEENTH_AUGUST, new PageRequest(0, 6)
+        );
+
+        final List<Long> actualIdentifiers = actual.getContent().stream().map(Reservation::getId).collect(toList());
+        assertThat(actualIdentifiers, is(asList(-15L, -14L, -13L, -12L, -11L, -10L)));
+    }
+
+    @Test
+    @DataSet(value = "/dbunit/ReservationRepositoryTest/findsAllReservationsByDateRangeAndPage_initial.xml")
+    public void findsFirstPageReservationsByDateRange() throws Exception {
+        final Page<Reservation> actual = repository.findByStartBetween(
+                TODAY, SEVENTEENTH_AUGUST, new PageRequest(1, 1)
+        );
+
+        final List<Long> actualIdentifiers = actual.getContent().stream().map(Reservation::getId).collect(toList());
+        assertThat(actualIdentifiers, is(asList(-14L)));
     }
 }

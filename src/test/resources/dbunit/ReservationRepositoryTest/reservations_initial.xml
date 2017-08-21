@@ -3,4 +3,5 @@
     <RESERVATION id="-1" first_name="first" last_name="last" room="7" start="2017-08-14" end="2017-08-15"/>
     <RESERVATION first_name="first" last_name="last" room="7" start="2017-08-15" end="2017-08-16"/>
     <RESERVATION first_name="first" last_name="last" room="7" start="2017-08-16" end="2017-08-17"/>
+    <RESERVATION first_name="first" last_name="last" room="8" start="2017-08-16" end="2017-08-17"/>
 </dataset>

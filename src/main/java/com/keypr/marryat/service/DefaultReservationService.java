@@ -4,6 +4,7 @@ import com.keypr.marryat.commons.ApplicationException;
 import com.keypr.marryat.dao.ReservationRepository;
 import com.keypr.marryat.domain.Reservation;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -47,6 +48,6 @@ public final class DefaultReservationService implements ReservationService {
 
     @Override
     public List<Reservation> allReservations(final LocalDate from, final LocalDate to, final int page, final int size) {
-        throw new UnsupportedOperationException();
+        return reservationRepository.findByStartBetween(from, to, new PageRequest(page, size)).getContent();
     }
 }
