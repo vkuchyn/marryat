@@ -17,7 +17,8 @@ import java.util.Map;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * System reservations controller test with whole spring context.
@@ -49,7 +50,6 @@ public final class ReservationControllerSystemTest {
         )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(json))
                 .andExpect(jsonPath("$.id").exists());
     }
 
@@ -76,9 +76,7 @@ public final class ReservationControllerSystemTest {
                         .contentType("application/json")
                         .content(updateJson)
         )
-                .andExpect(status().isOk())
-                .andExpect(content().json(updateJson));
-
+                .andExpect(status().isOk());
     }
 
     private String extractIdFromResponse(final String response) throws IOException {

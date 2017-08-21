@@ -8,6 +8,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Rest controller responsible for reservations CRUD manipulations and retrieving.
@@ -23,17 +25,21 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping("/reservations")
-    public ReservationView reserveRoom(@Valid @RequestBody final ReservationView reservationView, final Errors errors) {
+    public Map<String, Long> reserveRoom(@Valid @RequestBody final ReservationView reservationView, final Errors
+            errors) {
         final Reservation reservation = new Reservation(
                 reservationView.getFirstName(), reservationView.getLastName(),
                 reservationView.getRoomNumber(), reservationView.getStart(), reservationView.getEnd()
         );
         final Long reservationId = reservationService.reserveRoom(reservation);
-        return new ReservationView(reservationId, reservationView);
+
+        Map<String, Long> result = new HashMap<>();
+        result.put("id", reservationId);
+        return result;
     }
 
     @PutMapping("/reservations/{id}")
-    public ReservationView updateReservation(
+    public void updateReservation(
             @PathVariable("id") final Long id,
             @RequestBody final ReservationView reservationView
     ) {
@@ -42,6 +48,5 @@ public class ReservationController {
                 reservationView.getRoomNumber(), reservationView.getStart(), reservationView.getEnd()
         );
         reservationService.updateReservation(reservation);
-        return reservationView;
     }
 }

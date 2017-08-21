@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -43,12 +45,12 @@ public class ReservationControllerUnitTest {
     public void reservesRoom() throws Exception {
         when(service.reserveRoom(new Reservation(FIRST_NAME, SECOND_NAME, ROOM, TODAY, TODAY)))
                 .thenReturn(GENERATED_ID);
-        final ReservationView actual = this.controller.reserveRoom(
+        final Map<String, Long> actual = this.controller.reserveRoom(
                 new ReservationView(FIRST_NAME, SECOND_NAME, ROOM, TODAY, TODAY), null
         );
-        assertThat(actual, is(new ReservationView(
-                GENERATED_ID, FIRST_NAME, SECOND_NAME, ROOM, TODAY, TODAY)
-        ));
+        final Map<String, Long> expected = new HashMap<>();
+        expected.put("id", GENERATED_ID);
+        assertThat(actual, is(expected));
     }
 
     @Test(expected = ApplicationException.class)
