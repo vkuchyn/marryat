@@ -126,9 +126,6 @@ public class ReservationRepositoryTest {
     }
 
 
-    //TODO(vkuchyn) manage situations for end date is in new reservation range
-
-
     @Test
     @DataSet(value = "/dbunit/ReservationRepositoryTest/findsAllReservationsByDateRangeAndPage_initial.xml")
     public void findsAllReservationsByDateRange() throws Exception {
