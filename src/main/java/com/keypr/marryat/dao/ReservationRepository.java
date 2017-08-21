@@ -24,8 +24,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
      * @param end   End date of reservation.
      * @return count of founded reservations.
      */
-    @Query("SELECT count(p) FROM Reservation p WHERE p.id <> IFNULL(?1,0) AND room=?2 " +
-            "AND (p.start >= ?3 AND p.start< ?4)"
+    @Query("SELECT count(r) FROM Reservation r WHERE r.id <> IFNULL(?1,0) AND room=?2 " +
+            "AND ((r.start >= ?3 AND r.start< ?4) OR (r.end > ?3 AND r.end <= ?4) OR (r.start < ?3 AND r.end > ?4))"
     )
     int countByRoomAndDateRange(Long id, String room, LocalDate start, LocalDate end);
 

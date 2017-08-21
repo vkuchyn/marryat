@@ -61,6 +61,7 @@ public class ReservationRepositoryTest {
                 LocalDate.of(2017, 8, 17), LocalDate.of(2017, 8, 18)
         );
 
+        final List<Reservation> all = repository.findAll();
         assertThat(count, is(0));
     }
 
@@ -75,7 +76,7 @@ public class ReservationRepositoryTest {
     }
 
     @Test
-    @DataSet("/dbunit/ReservationRepositoryTest/reservations_initial.xml")
+    @DataSet("/dbunit/ReservationRepositoryTest/countsOneReservationWhenStartDateBetweenBookedDates_initial.xml")
     public void countsOneReservationWhenStartDateBetweenBookedDates() throws Exception {
         final int count = repository.countByRoomAndDateRange(null, "7",
                 LocalDate.of(2017, 8, 16), LocalDate.of(2017, 8, 18)
@@ -96,13 +97,34 @@ public class ReservationRepositoryTest {
 
     @Test
     @DataSet("/dbunit/ReservationRepositoryTest/reservations_initial.xml")
-    public void contsZeroWhenIdEquals() throws Exception {
+    public void countsZeroWhenIdEquals() throws Exception {
         final int count = repository.countByRoomAndDateRange(-1L, "7",
                 LocalDate.of(2017, 8, 13), LocalDate.of(2017, 8, 15)
         );
 
         assertThat(count, is(0));
     }
+
+    @Test
+    @DataSet("/dbunit/ReservationRepositoryTest/countsOneWhenNewReservationInsideExisting_initial.xml")
+    public void countsOneWhenNewReservationInsideExisting() throws Exception {
+        final int count = repository.countByRoomAndDateRange(null, "7",
+                LocalDate.of(2017, 8, 11), LocalDate.of(2017, 8, 12)
+        );
+
+        assertThat(count, is(1));
+    }
+
+    @Test
+    @DataSet("/dbunit/ReservationRepositoryTest/countsOneWhenEndDateInRange_initial.xml")
+    public void countsOneWhenEndDateInRange() throws Exception {
+        final int count = repository.countByRoomAndDateRange(null, "7",
+                LocalDate.of(2017, 8, 16), LocalDate.of(2017, 8, 18)
+        );
+
+        assertThat(count, is(1));
+    }
+
 
     //TODO(vkuchyn) manage situations for end date is in new reservation range
 
