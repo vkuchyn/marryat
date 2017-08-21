@@ -34,9 +34,14 @@ public class ReservationController {
 
     @PutMapping("/reservations/{id}")
     public ReservationView updateReservation(
-            @PathVariable("id") Long id,
-            @RequestBody ReservationView reservationView
+            @PathVariable("id") final Long id,
+            @RequestBody final ReservationView reservationView
     ) {
+        final Reservation reservation = new Reservation(
+                id, reservationView.getFirstName(), reservationView.getLastName(),
+                reservationView.getRoomNumber(), reservationView.getStart(), reservationView.getEnd()
+        );
+        reservationService.updateReservation(reservation);
         return reservationView;
     }
 }

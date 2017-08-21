@@ -70,7 +70,7 @@ public final class ReservationControllerSystemTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String id = extractIdFromResponse(mvcResult.getResponse().getContentAsString());
-        final String updateJson = json.replace("23B", "23C");
+        final String updateJson = json.replace("20170816", "20170817");
         mockMvc.perform(
                 put("/reservations/" + id)
                         .contentType("application/json")

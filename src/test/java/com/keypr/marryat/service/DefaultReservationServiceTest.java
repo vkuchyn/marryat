@@ -35,20 +35,44 @@ public class DefaultReservationServiceTest {
     }
 
     @Test
-    public void returnsGeneratedId() throws Exception {
+    public void returnsGeneratedIdOnReservation() throws Exception {
         final Reservation entity = mock(Reservation.class);
         when(repository.save(entity)).thenReturn(new Reservation(7L, "", "", "", TODAY, TODAY));
 
         final Long id = service.reserveRoom(entity);
         assertThat(id, is(7L));
-        verify(repository).save(entity);
     }
 
     @Test(expected = ApplicationException.class)
     public void throwsExceptionWhenRoomIsAlreadyReserved() throws Exception {
         final Reservation entity = new Reservation("", "", "room", TODAY, TOMORROW);
-        when(repository.countByRoomAndDateRange("room", TODAY, TOMORROW)).thenReturn(1);
+        when(repository.countByRoomAndDateRange(null, "room", TODAY, TOMORROW)).thenReturn(1);
 
         service.reserveRoom(entity);
+    }
+
+    @Test
+    public void updatesReservation() throws Exception {
+        final Reservation entity = new Reservation(3L, "", "", "", TODAY, TOMORROW);
+        when(repository.findOne(3L)).thenReturn(entity);
+        service.updateReservation(entity);
+
+        verify(repository).save(entity);
+    }
+
+    @Test(expected = ApplicationException.class)
+    public void throwsApplicationExceptionWhenNoReservationFound() throws Exception {
+        final Reservation entity = new Reservation(3L, "", "", "", TODAY, TOMORROW);
+        when(repository.findOne(3L)).thenReturn(null);
+        service.updateReservation(entity);
+    }
+
+    @Test(expected = ApplicationException.class)
+    public void throwsExceptionWhenRoomIsAlreadyReservedOnUpdateReservation() throws Exception {
+        final Reservation entity = new Reservation(4L, "", "", "room", TODAY, TOMORROW);
+        when(repository.findOne(4L)).thenReturn(entity);
+        when(repository.countByRoomAndDateRange(4L, "room", TODAY, TOMORROW)).thenReturn(1);
+
+        service.updateReservation(entity);
     }
 }

@@ -19,12 +19,26 @@ public final class DefaultReservationService implements ReservationService {
 
     @Override
     public Long reserveRoom(final Reservation reservation) {
+        validateReservation(reservation);
+        return reservationRepository.save(reservation).getId();
+    }
+
+    private void validateReservation(Reservation reservation) {
         final int roomReservations = this.reservationRepository.countByRoomAndDateRange(
-                reservation.getRoom(), reservation.getStart(), reservation.getEnd()
+                reservation.getId(), reservation.getRoom(), reservation.getStart(), reservation.getEnd()
         );
         if (roomReservations > 0) {
             throw new ApplicationException();
         }
-        return reservationRepository.save(reservation).getId();
+    }
+
+    @Override
+    public void updateReservation(Reservation reservation) {
+        validateReservation(reservation);
+        final Reservation existing = reservationRepository.findOne(reservation.getId());
+        if (existing == null) {
+            throw new ApplicationException();
+        }
+        reservationRepository.save(reservation);
     }
 }

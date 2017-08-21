@@ -52,7 +52,7 @@ public class ReservationRepositoryTest {
     @Test
     @DataSet("/dbunit/ReservationRepositoryTest/reservations_initial.xml")
     public void countsZeroReservations() throws Exception {
-        final int count = repository.countByRoomAndDateRange("7",
+        final int count = repository.countByRoomAndDateRange(null, "7",
                 LocalDate.of(2017, 8, 17), LocalDate.of(2017, 8, 18)
         );
 
@@ -62,7 +62,7 @@ public class ReservationRepositoryTest {
     @Test
     @DataSet("/dbunit/ReservationRepositoryTest/reservations_initial.xml")
     public void countsZeroWhenReservationsStartAtSameDayPreviousEnds() throws Exception {
-        final int count = repository.countByRoomAndDateRange("7",
+        final int count = repository.countByRoomAndDateRange(null, "7",
                 LocalDate.of(2017, 8, 13), LocalDate.of(2017, 8, 14)
         );
 
@@ -72,7 +72,7 @@ public class ReservationRepositoryTest {
     @Test
     @DataSet("/dbunit/ReservationRepositoryTest/reservations_initial.xml")
     public void countsOneReservationWhenStartDateBetweenBookedDates() throws Exception {
-        final int count = repository.countByRoomAndDateRange("7",
+        final int count = repository.countByRoomAndDateRange(null, "7",
                 LocalDate.of(2017, 8, 16), LocalDate.of(2017, 8, 18)
         );
 
@@ -82,10 +82,20 @@ public class ReservationRepositoryTest {
     @Test
     @DataSet("/dbunit/ReservationRepositoryTest/reservations_initial.xml")
     public void countsOneReservationWhenEndDateBetweenBookedDates() throws Exception {
-        final int count = repository.countByRoomAndDateRange("7",
+        final int count = repository.countByRoomAndDateRange(null, "7",
                 LocalDate.of(2017, 8, 13), LocalDate.of(2017, 8, 15)
         );
 
         assertThat(count, is(1));
+    }
+
+    @Test
+    @DataSet("/dbunit/ReservationRepositoryTest/reservations_initial.xml")
+    public void contsZeroWhenIdEquals() throws Exception {
+        final int count = repository.countByRoomAndDateRange(-1L, "7",
+                LocalDate.of(2017, 8, 13), LocalDate.of(2017, 8, 15)
+        );
+
+        assertThat(count, is(0));
     }
 }

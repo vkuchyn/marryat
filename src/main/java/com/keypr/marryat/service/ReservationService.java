@@ -16,4 +16,11 @@ public interface ReservationService {
      * @return Id of reservation.
      */
     Long reserveRoom(Reservation reservation);
+
+    /**
+     * Updates customer reservation if exists.
+     *
+     * @param reservation Entity.
+     */
+    void updateReservation(Reservation reservation);
 }
