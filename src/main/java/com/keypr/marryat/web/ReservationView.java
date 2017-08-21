@@ -32,6 +32,7 @@ public final class ReservationView {
     private String lastName;
     @JsonProperty("room")
     @NotNull(message = "{room.date.not.null}")
+    //TODO(vkuchyn) validate room exists.
     private String roomNumber;
     @JsonProperty("start_date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
