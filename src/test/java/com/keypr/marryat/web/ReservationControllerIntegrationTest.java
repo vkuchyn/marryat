@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static com.keypr.marryat.web.commons.FakeClock.FIXED_CURRENT_TIME;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,6 +64,24 @@ public final class ReservationControllerIntegrationTest {
                         "\"errorKey\":\"end.date.after.start.date\"," +
                         "\"description\":\"End date should be after start date\"" +
                         "}]"));
+    }
+
+    @Test
+    public void validatesWrongDatesOnUpdate() throws Exception {
+        mockMvc.perform(
+                put("/reservations/1")
+                        .content('{' +
+                                "\"first_name\": \"Victor\"," +
+                                "\"last_name\": \"Kuchyn\"," +
+                                "\"room\": \"23A\"," +
+                                "\"start_date\": \"20170814\"," +
+                                "\"end_date\":  \"20170814\"" +
+                                '}')
+                        .contentType("application/json")
+        )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
     }
 
     @Test

@@ -41,7 +41,8 @@ public class ReservationController {
     @PutMapping("/reservations/{id}")
     public void updateReservation(
             @PathVariable("id") final Long id,
-            @RequestBody final ReservationView reservationView
+            @Valid @RequestBody final ReservationView reservationView,
+            final Errors errors
     ) {
         final Reservation reservation = new Reservation(
                 id, reservationView.getFirstName(), reservationView.getLastName(),
