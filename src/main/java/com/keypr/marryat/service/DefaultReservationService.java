@@ -6,6 +6,9 @@ import com.keypr.marryat.domain.Reservation;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 /**
  * Main implementation of service, provides transaction support and business logic rules.
  *
@@ -40,5 +43,10 @@ public final class DefaultReservationService implements ReservationService {
             throw new ApplicationException();
         }
         reservationRepository.save(reservation);
+    }
+
+    @Override
+    public List<Reservation> allReservations(final LocalDate from, final LocalDate to, final int page, final int size) {
+        throw new UnsupportedOperationException();
     }
 }
