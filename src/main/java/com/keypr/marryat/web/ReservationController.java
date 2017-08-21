@@ -5,10 +5,7 @@ import com.keypr.marryat.service.ReservationService;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -33,5 +30,13 @@ public class ReservationController {
         );
         final Long reservationId = reservationService.reserveRoom(reservation);
         return new ReservationView(reservationId, reservationView);
+    }
+
+    @PutMapping("/reservations/{id}")
+    public ReservationView updateReservation(
+            @PathVariable("id") Long id,
+            @RequestBody ReservationView reservationView
+    ) {
+        return reservationView;
     }
 }

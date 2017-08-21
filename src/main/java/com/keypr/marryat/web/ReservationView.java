@@ -2,6 +2,7 @@ package com.keypr.marryat.web;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.keypr.marryat.web.validation.DateRange;
 import com.keypr.marryat.web.validation.FutureOrToday;
 import lombok.AllArgsConstructor;
@@ -34,11 +35,13 @@ public final class ReservationView {
     private String roomNumber;
     @JsonProperty("start_date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @NotNull(message = "{start.date.not.null}")
     @FutureOrToday
     private LocalDate start;
     @JsonProperty("end_date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @NotNull(message = "{end.date.not.null}")
     private LocalDate end;
 
