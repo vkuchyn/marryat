@@ -28,7 +28,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="2017_08_22__01_reservation" author="vkuchyn">
+    <changeSet id="2017_08_22__01_room_table" author="vkuchyn">
         <createTable tableName="room">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -37,5 +37,24 @@
                 <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="2017_08_22__02_room_data" author="vkuchyn">
+        <insert tableName="room" dbms="h2">
+            <column name="id" value="1"/>
+            <column name="name" value="101"/>
+        </insert>
+        <insert tableName="room" dbms="h2">
+            <column name="id" value="2"/>
+            <column name="name" value="102"/>
+        </insert>
+        <insert tableName="room" dbms="h2">
+            <column name="id" value="3"/>
+            <column name="name" value="103"/>
+        </insert>
+        <insert tableName="room" dbms="h2">
+            <column name="id" value="4"/>
+            <column name="name" value="104"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>
