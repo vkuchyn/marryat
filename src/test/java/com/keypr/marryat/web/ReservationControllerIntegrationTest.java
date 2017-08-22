@@ -264,13 +264,12 @@ public final class ReservationControllerIntegrationTest {
 
     @Test
     public void expectsBadRequestOnWrongRoom() throws Exception {
-        when(roomService.allRooms()).thenReturn(asSet("101", "102", "103"));
         mockMvc.perform(
                 post("/reservations")
                         .content('{' +
                                 "\"first_name\": \"Victor\"," +
                                 "\"last_name\": \"Kuchyn\"," +
-                                "\"room\": \"100\"," +
+                                "\"room\": \"invalid_room\"," +
                                 "\"start_date\": \"20170815\"," +
                                 "\"end_date\":  \"20170816\"" +
                                 '}')
@@ -280,7 +279,7 @@ public final class ReservationControllerIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json("[{" +
                         "\"errorKey\":\"room.not.exists\"," +
-                        "\"description\":\"Room 100 not exists in hotel\"" +
+                        "\"description\":\"Room invalid_room not exists in hotel\"" +
                         "}]")
                 );
     }
