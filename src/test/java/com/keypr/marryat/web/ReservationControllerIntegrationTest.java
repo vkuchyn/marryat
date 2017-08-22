@@ -5,6 +5,7 @@ import com.keypr.marryat.commons.Clock;
 import com.keypr.marryat.commons.NotFoundException;
 import com.keypr.marryat.domain.Reservation;
 import com.keypr.marryat.service.ReservationService;
+import com.keypr.marryat.service.RoomService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 
 import static com.keypr.marryat.web.commons.FakeClock.FIXED_CURRENT_TIME;
 import static java.util.Arrays.asList;
+import static org.hibernate.validator.internal.util.CollectionHelper.asSet;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,11 +46,14 @@ public final class ReservationControllerIntegrationTest {
     private Clock clock;
 
     @MockBean
-    private ReservationService service;
+    private ReservationService reservationService;
+    @MockBean
+    private RoomService roomService;
 
     @Before
     public void setUpMocks() {
         when(this.clock.date()).thenReturn(FIXED_CURRENT_TIME.toLocalDate());
+        when(this.roomService.allRooms()).thenReturn(asSet("23A", "23B"));
     }
 
     @Test //TODO(vkuchyn) extract massive jsons to resource files.
@@ -142,7 +147,7 @@ public final class ReservationControllerIntegrationTest {
     public void fetchesAllReservationsWithPagination() throws Exception {
         final LocalDate from = LocalDate.of(2017, 8, 14);
         final LocalDate to = LocalDate.of(2017, 8, 16);
-        when(service.allReservations(
+        when(reservationService.allReservations(
                 from, to, 0, 2
                 )
         ).thenReturn(asList(new Reservation("first", "last", "25", from, to)));
@@ -177,7 +182,7 @@ public final class ReservationControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        verify(service).allReservations(
+        verify(reservationService).allReservations(
                 LocalDate.of(2017, 8, 14), LocalDate.of(2017, 8, 16),
                 0, Integer.MAX_VALUE
         );
@@ -194,7 +199,8 @@ public final class ReservationControllerIntegrationTest {
     @Test
     public void removesReservation() throws Exception {
         final LocalDate date = LocalDate.of(2017, 8, 14);
-        when(service.removeReservation(1L)).thenReturn(new Reservation(1L, "first", "last", "23", date, date));
+        when(reservationService.removeReservation(1L)).thenReturn(new Reservation(1L, "first", "last", "23", date,
+                date));
         mockMvc.perform(
                 delete("/reservations/1")
                         .contentType("application/json")
@@ -215,7 +221,7 @@ public final class ReservationControllerIntegrationTest {
     @Test
     public void expectsNotFountOnWrongReservationId() throws Exception {
         final LocalDate date = LocalDate.of(2017, 8, 14);
-        when(service.removeReservation(1L)).thenThrow(
+        when(reservationService.removeReservation(1L)).thenThrow(
                 new NotFoundException("reservation.not.found", "Could not found reservation with id 1")
         );
         mockMvc.perform(
@@ -233,7 +239,7 @@ public final class ReservationControllerIntegrationTest {
 
     @Test
     public void expectsBadRequestWhenRoomIsAlreadyReservedForReservation() throws Exception {
-        when(service.reserveRoom(any(Reservation.class))).thenThrow(
+        when(reservationService.reserveRoom(any(Reservation.class))).thenThrow(
                 new ApplicationException("room.reserved.for.dates", "Room is already reserved for posted dates")
         );
         mockMvc.perform(
@@ -253,6 +259,29 @@ public final class ReservationControllerIntegrationTest {
                         "\"errorKey\":\"room.reserved.for.dates\"," +
                         "\"description\":\"Room is already reserved for posted dates\"" +
                         '}')
+                );
+    }
+
+    @Test
+    public void expectsBadRequestOnWrongRoom() throws Exception {
+        when(roomService.allRooms()).thenReturn(asSet("101", "102", "103"));
+        mockMvc.perform(
+                post("/reservations")
+                        .content('{' +
+                                "\"first_name\": \"Victor\"," +
+                                "\"last_name\": \"Kuchyn\"," +
+                                "\"room\": \"100\"," +
+                                "\"start_date\": \"20170815\"," +
+                                "\"end_date\":  \"20170816\"" +
+                                '}')
+                        .contentType("application/json")
+        )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("[{" +
+                        "\"errorKey\":\"room.not.exists\"," +
+                        "\"description\":\"Room 100 not exists in hotel\"" +
+                        "}]")
                 );
     }
 }
