@@ -76,4 +76,24 @@ public class DefaultReservationServiceTest {
 
         service.updateReservation(entity);
     }
+
+    @Test
+    public void removesReservation() throws Exception {
+        final Long id = 4L;
+        final Reservation entity = new Reservation(id, "", "", "room", TODAY, TOMORROW);
+        when(repository.findOne(id)).thenReturn(entity);
+
+        final Reservation expected = service.removeReservation(id);
+
+        assertThat(expected, is(entity));
+        verify(repository).delete(id);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void throwsNotFoundWhenNoReservationFound() throws Exception {
+        final Long id = 4L;
+        when(repository.findOne(id)).thenReturn(null);
+
+        service.removeReservation(id);
+    }
 }

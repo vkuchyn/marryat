@@ -127,7 +127,7 @@ public class ReservationRepositoryTest {
 
 
     @Test
-    @DataSet(value = "/dbunit/ReservationRepositoryTest/findsAllReservationsByDateRangeAndPage_initial.xml")
+    @DataSet("/dbunit/ReservationRepositoryTest/findsAllReservationsByDateRangeAndPage_initial.xml")
     public void findsAllReservationsByDateRange() throws Exception {
         final Page<Reservation> actual = repository.findByStartBetween(
                 TODAY, SEVENTEENTH_AUGUST, new PageRequest(0, 6)
@@ -138,7 +138,7 @@ public class ReservationRepositoryTest {
     }
 
     @Test
-    @DataSet(value = "/dbunit/ReservationRepositoryTest/findsAllReservationsByDateRangeAndPage_initial.xml")
+    @DataSet("/dbunit/ReservationRepositoryTest/findsAllReservationsByDateRangeAndPage_initial.xml")
     public void findsFirstPageReservationsByDateRange() throws Exception {
         final Page<Reservation> actual = repository.findByStartBetween(
                 TODAY, SEVENTEENTH_AUGUST, new PageRequest(1, 1)
@@ -146,5 +146,13 @@ public class ReservationRepositoryTest {
 
         final List<Long> actualIdentifiers = actual.getContent().stream().map(Reservation::getId).collect(toList());
         assertThat(actualIdentifiers, is(asList(-14L)));
+    }
+
+    @Test
+    @DataSet("/dbunit/ReservationRepositoryTest/reservations_initial.xml")
+    @ExpectedDataSet("/dbunit/ReservationRepositoryTest/deletesReservation_expected.xml")
+    @Commit
+    public void deletesReservation() throws Exception {
+        repository.delete(-1L);
     }
 }

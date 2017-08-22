@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Main implementation of service, provides transaction support and business logic rules.
@@ -54,7 +55,12 @@ public final class DefaultReservationService implements ReservationService {
     }
 
     @Override
-    public Reservation removeReservation(Long id) {
-        throw new UnsupportedOperationException();
+    public Reservation removeReservation(final Long id) {
+        final Reservation removed = Optional.ofNullable(reservationRepository.findOne(id)).orElseThrow(
+                () -> new NotFoundException("reservation.not.found", "Could not found reservation with id " + id)
+        );
+        reservationRepository.delete(id);
+        return removed;
     }
 }
+
