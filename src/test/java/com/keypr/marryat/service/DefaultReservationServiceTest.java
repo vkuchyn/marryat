@@ -1,6 +1,7 @@
 package com.keypr.marryat.service;
 
 import com.keypr.marryat.commons.ApplicationException;
+import com.keypr.marryat.commons.NotFoundException;
 import com.keypr.marryat.dao.ReservationRepository;
 import com.keypr.marryat.domain.Reservation;
 import org.junit.Before;
@@ -60,7 +61,7 @@ public class DefaultReservationServiceTest {
         verify(repository).save(entity);
     }
 
-    @Test(expected = ApplicationException.class)
+    @Test(expected = NotFoundException.class)
     public void throwsApplicationExceptionWhenNoReservationFound() throws Exception {
         final Reservation entity = new Reservation(3L, "", "", "", TODAY, TOMORROW);
         when(repository.findOne(3L)).thenReturn(null);

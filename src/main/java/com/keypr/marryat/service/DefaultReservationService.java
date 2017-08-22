@@ -1,6 +1,7 @@
 package com.keypr.marryat.service;
 
 import com.keypr.marryat.commons.ApplicationException;
+import com.keypr.marryat.commons.NotFoundException;
 import com.keypr.marryat.dao.ReservationRepository;
 import com.keypr.marryat.domain.Reservation;
 import lombok.AllArgsConstructor;
@@ -39,9 +40,10 @@ public final class DefaultReservationService implements ReservationService {
     @Override
     public void updateReservation(Reservation reservation) {
         validateReservation(reservation);
-        final Reservation existing = reservationRepository.findOne(reservation.getId());
+        final Long id = reservation.getId();
+        final Reservation existing = reservationRepository.findOne(id);
         if (existing == null) {
-            throw new ApplicationException();
+            throw new NotFoundException("reservation.not.found", "Could not found reservation with id " + id);
         }
         reservationRepository.save(reservation);
     }
