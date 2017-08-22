@@ -37,4 +37,6 @@ public interface ReservationService {
      * @return all reservations for specified period according pagination.
      */
     List<Reservation> allReservations(LocalDate from, LocalDate to, int page, int size);
+
+    Reservation removeReservation(Long id);
 }

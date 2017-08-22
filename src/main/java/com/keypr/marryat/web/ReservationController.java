@@ -32,10 +32,7 @@ public class ReservationController {
     @PostMapping
     public Map<String, Long> reserveRoom(@Valid @RequestBody final ReservationView reservationView, final Errors
             errors) {
-        final Reservation reservation = new Reservation(
-                reservationView.getFirstName(), reservationView.getLastName(),
-                reservationView.getRoomNumber(), reservationView.getStart(), reservationView.getEnd()
-        );
+        final Reservation reservation = mapViewToEntity(null, reservationView);
         final Long reservationId = reservationService.reserveRoom(reservation);
 
         Map<String, Long> result = new HashMap<>();
@@ -52,10 +49,7 @@ public class ReservationController {
     ) {
         return reservationService.allReservations(from, to, page, size)
                 .stream()
-                .map(entity -> new ReservationView(
-                        entity.getId(), entity.getFirstName(), entity.getLastName(), entity.getRoom(),
-                        entity.getStart(), entity.getEnd()
-                )).collect(toList());
+                .map(entity -> mapEntityToView(entity)).collect(toList());
     }
 
     @PutMapping("/{id}")
@@ -64,10 +58,30 @@ public class ReservationController {
             @Valid @RequestBody final ReservationView reservationView,
             final Errors errors
     ) {
-        final Reservation reservation = new Reservation(
+        final Reservation reservation = mapViewToEntity(id, reservationView);
+        reservationService.updateReservation(reservation);
+    }
+
+    @DeleteMapping("/{id}")
+    public ReservationView removeReservation(
+            @PathVariable("id") final Long id
+    ) {
+        final Reservation reservation = reservationService.removeReservation(id);
+        return mapEntityToView(reservation);
+    }
+
+    private Reservation mapViewToEntity(@PathVariable("id") Long id, @Valid @RequestBody ReservationView
+            reservationView) {
+        return new Reservation(
                 id, reservationView.getFirstName(), reservationView.getLastName(),
                 reservationView.getRoomNumber(), reservationView.getStart(), reservationView.getEnd()
         );
-        reservationService.updateReservation(reservation);
+    }
+
+    private ReservationView mapEntityToView(Reservation entity) {
+        return new ReservationView(
+                entity.getId(), entity.getFirstName(), entity.getLastName(), entity.getRoom(),
+                entity.getStart(), entity.getEnd()
+        );
     }
 }

@@ -50,4 +50,9 @@ public final class DefaultReservationService implements ReservationService {
     public List<Reservation> allReservations(final LocalDate from, final LocalDate to, final int page, final int size) {
         return reservationRepository.findByStartBetween(from, to, new PageRequest(page, size)).getContent();
     }
+
+    @Override
+    public Reservation removeReservation(Long id) {
+        throw new UnsupportedOperationException();
+    }
 }

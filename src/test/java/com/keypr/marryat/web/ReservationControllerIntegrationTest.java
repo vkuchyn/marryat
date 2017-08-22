@@ -187,4 +187,25 @@ public final class ReservationControllerIntegrationTest {
                         .contentType("application/json")
         ).andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void removesReservation() throws Exception {
+        final LocalDate date = LocalDate.of(2017, 8, 14);
+        when(service.removeReservation(1L)).thenReturn(new Reservation(1L, "first", "last", "23", date, date));
+        mockMvc.perform(
+                delete("/reservations/1")
+                        .contentType("application/json")
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        '{' +
+                                "\"id\":1," +
+                                "\"first_name\": \"first\"," +
+                                "\"last_name\": \"last\"," +
+                                "\"room\": \"23\"," +
+                                "\"start_date\": \"20170814\"," +
+                                "\"end_date\":  \"20170814\"" +
+                                '}')
+                );
+    }
 }
