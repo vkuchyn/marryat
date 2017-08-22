@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.keypr.marryat.web.validation.DateRange;
 import com.keypr.marryat.web.validation.FutureOrToday;
+import com.keypr.marryat.web.validation.RoomExists;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -22,24 +23,30 @@ import java.time.LocalDate;
 public final class ReservationView {
 
     private static final long DEFAULT_ID = 0L;
+
     @JsonProperty("id")
     private Long id;
+
     @JsonProperty("first_name")
     @NotNull(message = "{first.name.not.null}")
     private String firstName;
+
     @JsonProperty("last_name")
     @NotNull(message = "{last.name.not.null}")
     private String lastName;
+
     @JsonProperty("room")
     @NotNull(message = "{room.date.not.null}")
-    //TODO(vkuchyn) validate room exists.
+    @RoomExists(message = "{room.not.exists}")
     private String roomNumber;
+
     @JsonProperty("start_date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @NotNull(message = "{start.date.not.null}")
     @FutureOrToday
     private LocalDate start;
+
     @JsonProperty("end_date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
