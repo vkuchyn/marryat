@@ -45,4 +45,10 @@ public final class FutureOrTodayValidatorTest {
         final boolean valid = new FutureOrTodayValidator(this.clock).isValid(today, null);
         assertThat(valid, is(false));
     }
+
+    @Test
+    public void returnsTrueIfInputNull() throws Exception {
+        final boolean valid = new FutureOrTodayValidator(this.clock).isValid(null, null);
+        assertThat(valid, is(true));
+    }
 }

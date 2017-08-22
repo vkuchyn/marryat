@@ -24,6 +24,6 @@ public final class FutureOrTodayValidator implements ConstraintValidator<FutureO
 
     @Override
     public boolean isValid(final LocalDate localDate, final ConstraintValidatorContext validatorContext) {
-        return localDate.plusDays(ONE).isAfter(this.clock.date());
+        return localDate == null || localDate.plusDays(ONE).isAfter(this.clock.date());
     }
 }

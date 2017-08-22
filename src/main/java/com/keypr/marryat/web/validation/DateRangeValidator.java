@@ -4,6 +4,7 @@ import com.keypr.marryat.web.ReservationView;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.time.LocalDate;
 
 /**
  * Validator implementation. Validates reservation start date is before end date.
@@ -20,6 +21,8 @@ public final class DateRangeValidator implements ConstraintValidator<DateRange, 
     public boolean isValid(
             final ReservationView reservation, final ConstraintValidatorContext validatorContext
     ) {
-        return reservation.getEnd().isAfter(reservation.getStart());
+        LocalDate start = reservation.getStart();
+        final LocalDate end = reservation.getEnd();
+        return start == null || end == null || end.isAfter(start);
     }
 }
