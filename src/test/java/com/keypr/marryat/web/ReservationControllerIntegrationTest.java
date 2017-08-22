@@ -1,6 +1,7 @@
 package com.keypr.marryat.web;
 
 import com.keypr.marryat.commons.Clock;
+import com.keypr.marryat.commons.NotFoundException;
 import com.keypr.marryat.domain.Reservation;
 import com.keypr.marryat.service.ReservationService;
 import org.junit.Before;
@@ -205,6 +206,25 @@ public final class ReservationControllerIntegrationTest {
                                 "\"room\": \"23\"," +
                                 "\"start_date\": \"20170814\"," +
                                 "\"end_date\":  \"20170814\"" +
+                                '}')
+                );
+    }
+
+    @Test
+    public void expectsNotFountOnWrongReservationId() throws Exception {
+        final LocalDate date = LocalDate.of(2017, 8, 14);
+        when(service.removeReservation(1L)).thenThrow(
+                new NotFoundException("reservation.not.found", "Could not found reservation with id 1")
+        );
+        mockMvc.perform(
+                delete("/reservations/1")
+                        .contentType("application/json")
+        )
+                .andExpect(status().isNotFound())
+                .andExpect(content().json(
+                        '{' +
+                                "\"errorKey\":\"reservation.not.found\"," +
+                                "\"description\": \"Could not found reservation with id 1\"" +
                                 '}')
                 );
     }

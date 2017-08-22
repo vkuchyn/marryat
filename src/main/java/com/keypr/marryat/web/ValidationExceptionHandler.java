@@ -1,5 +1,6 @@
 package com.keypr.marryat.web;
 
+import com.keypr.marryat.commons.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +31,13 @@ public class ValidationExceptionHandler {
                         violation.getMessage())
                 )
                 .collect(toList());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorView handleNotFoundException(final NotFoundException exception) {
+        return new ErrorView(exception.getErrorKey(), exception.getMessage());
     }
 
     // Just remove first and last symbol assuming we have template in format `{<error_key}`
