@@ -29,23 +29,14 @@ public final class DefaultReservationService implements ReservationService {
         return reservationRepository.save(reservation).getId();
     }
 
-    private void validateReservation(Reservation reservation) {
-        final int roomReservations = this.reservationRepository.countByRoomAndDateRange(
-                reservation.getId(), reservation.getRoom(), reservation.getStart(), reservation.getEnd()
-        );
-        if (roomReservations > 0) {
-            throw new ApplicationException("room.reserved.for.dates", "Room is already reserved for posted dates");
-        }
-    }
-
     @Override
     public void updateReservation(Reservation reservation) {
         validateReservation(reservation);
         final Long id = reservation.getId();
-        final Reservation existing = reservationRepository.findOne(id);
-        if (existing == null) {
-            throw new NotFoundException("reservation.not.found", "Could not found reservation with id " + id);
-        }
+        Optional.ofNullable(reservationRepository.findOne(id)).orElseThrow(
+                () -> new NotFoundException("reservation.not.found", "Could not found reservation with id " + id)
+        );
+
         reservationRepository.save(reservation);
     }
 
@@ -61,6 +52,15 @@ public final class DefaultReservationService implements ReservationService {
         );
         reservationRepository.delete(id);
         return removed;
+    }
+
+    private void validateReservation(Reservation reservation) {
+        final int roomReservations = this.reservationRepository.countByRoomAndDateRange(
+                reservation.getId(), reservation.getRoom(), reservation.getStart(), reservation.getEnd()
+        );
+        if (roomReservations > 0) {
+            throw new ApplicationException("room.reserved.for.dates", "Room is already reserved for posted dates");
+        }
     }
 }
 
