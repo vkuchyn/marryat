@@ -3,18 +3,19 @@ package com.keypr.marryat.dao;
 import com.github.database.rider.core.DBUnitRule;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
+import com.keypr.marryat.MarryatConfiguration;
 import com.keypr.marryat.domain.Reservation;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
@@ -31,7 +32,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * @author viktor email kuchin.victor@gmail.com
  */
 @RunWith(SpringRunner.class)
-@DataJpaTest(excludeAutoConfiguration = LiquibaseAutoConfiguration.class)
+@DataJpaTest
+@ContextConfiguration(classes = MarryatConfiguration.class)
 @ActiveProfiles("test")
 public class ReservationRepositoryTest {
 

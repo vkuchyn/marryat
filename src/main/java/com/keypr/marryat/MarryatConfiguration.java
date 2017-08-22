@@ -2,6 +2,7 @@ package com.keypr.marryat;
 
 import com.keypr.marryat.commons.Clock;
 import liquibase.integration.spring.SpringLiquibase;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,6 +12,7 @@ import javax.sql.DataSource;
  * @author viktor email kuchin.victor@gmail.com
  */
 @Configuration
+@EnableAutoConfiguration
 public class MarryatConfiguration {
 
     @Bean
