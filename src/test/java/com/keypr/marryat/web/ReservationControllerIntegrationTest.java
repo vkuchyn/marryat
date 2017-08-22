@@ -1,5 +1,6 @@
 package com.keypr.marryat.web;
 
+import com.keypr.marryat.commons.ApplicationException;
 import com.keypr.marryat.commons.Clock;
 import com.keypr.marryat.commons.NotFoundException;
 import com.keypr.marryat.domain.Reservation;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 
 import static com.keypr.marryat.web.commons.FakeClock.FIXED_CURRENT_TIME;
 import static java.util.Arrays.asList;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -226,6 +228,31 @@ public final class ReservationControllerIntegrationTest {
                                 "\"errorKey\":\"reservation.not.found\"," +
                                 "\"description\": \"Could not found reservation with id 1\"" +
                                 '}')
+                );
+    }
+
+    @Test
+    public void expectsBadRequestWhenRoomIsAlreadyReservedForReservation() throws Exception {
+        when(service.reserveRoom(any(Reservation.class))).thenThrow(
+                new ApplicationException("room.reserved.for.dates", "Room is already reserved for posted dates")
+        );
+        mockMvc.perform(
+                post("/reservations")
+                        .content('{' +
+                                "\"first_name\": \"Victor\"," +
+                                "\"last_name\": \"Kuchyn\"," +
+                                "\"room\": \"23B\"," +
+                                "\"start_date\": \"20170815\"," +
+                                "\"end_date\":  \"20170816\"" +
+                                '}')
+                        .contentType("application/json")
+        )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json('{' +
+                        "\"errorKey\":\"room.reserved.for.dates\"," +
+                        "\"description\":\"Room is already reserved for posted dates\"" +
+                        '}')
                 );
     }
 }

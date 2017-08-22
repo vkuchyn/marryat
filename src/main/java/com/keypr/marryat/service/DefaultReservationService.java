@@ -34,7 +34,7 @@ public final class DefaultReservationService implements ReservationService {
                 reservation.getId(), reservation.getRoom(), reservation.getStart(), reservation.getEnd()
         );
         if (roomReservations > 0) {
-            throw new ApplicationException();
+            throw new ApplicationException("room.reserved.for.dates", "Room is already reserved for posted dates");
         }
     }
 

@@ -55,7 +55,7 @@ public class ReservationControllerUnitTest {
 
     @Test(expected = ApplicationException.class)
     public void rethrowsServiceApplicationException() throws Exception {
-        when(service.reserveRoom(any(Reservation.class))).thenThrow(new ApplicationException());
+        when(service.reserveRoom(any(Reservation.class))).thenThrow(new ApplicationException("", ""));
         this.controller.reserveRoom(new ReservationView(FIRST_NAME, SECOND_NAME, ROOM, TODAY, TODAY), null);
     }
 }
